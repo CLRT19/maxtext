@@ -1696,6 +1696,16 @@ class VisionTower(BaseModel):
   num_position_embeddings_for_vit: int = Field(1024, description="Number of position embeddings for ViT.")
   deepstack_visual_indexes_for_vit: list[int] = Field([], description="Layer indices to extract deep visual features.")
   vision_output_length: int = Field(-1, description="The output length (number of soft tokens) from the vision encoder.")
+  # Qwen2.5-VL specific: windowed attention + per-layer full-attention indices.
+  window_size_for_vit: int = Field(0, description="Window size for windowed attention in the ViT (Qwen2.5-VL=112). 0 disables.")
+  fullatt_block_indexes_for_vit: list[int] = Field(
+      [], description="Indices of ViT blocks that use full (non-windowed) attention (Qwen2.5-VL=[7,15,23,31])."
+  )
+  # Vision-related token IDs (Qwen2.5-VL needs these to scatter vision tokens into the LM stream).
+  image_token_id: int = Field(-1, description="Token ID used as the image placeholder in the input stream (-1 = unused).")
+  video_token_id: int = Field(-1, description="Token ID used as the video placeholder in the input stream (-1 = unused).")
+  vision_start_token_id: int = Field(-1, description="Token ID marking the start of a vision region (-1 = unused).")
+  vision_end_token_id: int = Field(-1, description="Token ID marking the end of a vision region (-1 = unused).")
 
 
 class VisionProjector(BaseModel):

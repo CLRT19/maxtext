@@ -58,6 +58,14 @@ class VisionEncoder(nnx.Module):
       setattr(self, encoder_name, qwen3.Qwen3OmniMoeVisionEncoder(config=self.config, mesh=self.mesh, rngs=self.rngs))
       setattr(self, projector_name, qwen3.Qwen3OmniMoeVisionProjector(config=self.config, rngs=self.rngs))
       return encoder_name, projector_name
+    elif self.config.model_name in ["qwen2.5-vl-7b"]:
+      from maxtext.models import qwen2_5_vl  # pylint: disable=import-outside-toplevel
+
+      encoder_name = "Qwen2_5_VisionEncoder_0"
+      projector_name = "Qwen2_5_VisionMerger_0"
+      setattr(self, encoder_name, qwen2_5_vl.Qwen2_5_VisionEncoder(config=self.config, mesh=self.mesh, rngs=self.rngs))
+      setattr(self, projector_name, qwen2_5_vl.Qwen2_5_VisionMerger(config=self.config, mesh=self.mesh, rngs=self.rngs))
+      return encoder_name, projector_name
     elif self.config.model_name in ["gemma4-26b", "gemma4-31b"]:
       from maxtext.models import gemma4_vision  # pylint: disable=import-outside-toplevel
 
